@@ -92,8 +92,27 @@ const mockData: ModelsData = {
   ]
 };
 
+const fetchBlobData = async (sasToken: string): Promise<ModelsData> => {
+  try {
+    const response = await fetch(`https://your-storage-account.blob.core.windows.net/models?${sasToken}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch from blob storage');
+    }
+    return await response.json();
+  } catch (error) {
+    console.warn('Failed to fetch from blob storage, falling back to mock data:', error);
+    return mockData;
+  }
+};
+
 export const fetchModelsData = async (): Promise<ModelsData> => {
-  // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  const sasToken = import.meta.env.VITE_BLOB_SAS_TOKEN;
+  
+  if (sasToken) {
+    return fetchBlobData(sasToken);
+  }
+
+  // Fallback to mock data if no SAS token is available
+  await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate network delay
   return mockData;
 };
