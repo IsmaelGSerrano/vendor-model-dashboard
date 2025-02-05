@@ -1,5 +1,5 @@
 import { ModelsData } from "@/types/models";
-import VendorSection from "@/components/VendorSection";
+import CompanySection from "@/components/CompanySection";
 import { useQuery } from "@tanstack/react-query";
 import { fetchModelsData } from "@/services/mockBlobService";
 
@@ -29,8 +29,8 @@ const Index = () => {
     <div className="container py-8">
       <h1 className="text-3xl font-bold mb-8">Models Dashboard</h1>
       <div className="space-y-6">
-        {data?.vendors_list.map((vendor) => (
-          <VendorSection key={vendor.vendor} vendor={vendor} />
+        {data?.companies.map((company) => (
+          <CompanySection key={company.company_name} company={company} />
         ))}
       </div>
     </div>

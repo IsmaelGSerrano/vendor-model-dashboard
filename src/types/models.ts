@@ -29,6 +29,11 @@ export interface Vendor {
   endpoint_exists: boolean;
 }
 
-export interface ModelsData {
+export interface CompanyData {
+  company_name: string;
   vendors_list: Vendor[];
+}
+
+export interface ModelsData {
+  companies: CompanyData[];
 }
