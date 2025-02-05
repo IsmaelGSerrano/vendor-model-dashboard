@@ -93,8 +93,18 @@ const mockData: ModelsData = {
 };
 
 const fetchBlobData = async (sasToken: string): Promise<ModelsData> => {
+  const accountName = import.meta.env.VITE_STORAGE_ACCOUNT;
+  const containerName = import.meta.env.VITE_CONTAINER_NAME;
+
+  if (!accountName || !containerName) {
+    console.warn('Storage account or container name not configured, falling back to mock data');
+    return mockData;
+  }
+
   try {
-    const response = await fetch(`https://your-storage-account.blob.core.windows.net/models?${sasToken}`);
+    const response = await fetch(
+      `https://${accountName}.blob.core.windows.net/${containerName}/models?${sasToken}`
+    );
     if (!response.ok) {
       throw new Error('Failed to fetch from blob storage');
     }
