@@ -103,7 +103,7 @@ const fetchBlobData = async (sasToken: string): Promise<ModelsData> => {
 
   try {
     const response = await fetch(
-      `https://${accountName}.blob.core.windows.net/${containerName}/models?${sasToken}`
+      `https://${accountName}.blob.core.windows.net/${containerName}?${sasToken}`
     );
     if (!response.ok) {
       throw new Error('Failed to fetch from blob storage');
