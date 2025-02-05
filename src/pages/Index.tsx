@@ -1,18 +1,12 @@
 import { ModelsData } from "@/types/models";
 import VendorSection from "@/components/VendorSection";
 import { useQuery } from "@tanstack/react-query";
+import { fetchModelsData } from "@/services/mockBlobService";
 
 const Index = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["models"],
-    queryFn: async () => {
-      // Replace this with your actual API call
-      const response = await fetch("/api/models");
-      if (!response.ok) {
-        throw new Error("Failed to fetch models");
-      }
-      return response.json() as Promise<ModelsData>;
-    },
+    queryFn: fetchModelsData,
   });
 
   if (isLoading) {
