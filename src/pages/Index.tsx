@@ -1,11 +1,43 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { ModelsData } from "@/types/models";
+import VendorSection from "@/components/VendorSection";
+import { useQuery } from "@tanstack/react-query";
 
 const Index = () => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["models"],
+    queryFn: async () => {
+      // Replace this with your actual API call
+      const response = await fetch("/api/models");
+      if (!response.ok) {
+        throw new Error("Failed to fetch models");
+      }
+      return response.json() as Promise<ModelsData>;
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-error">Failed to load models data</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="container py-8">
+      <h1 className="text-3xl font-bold mb-8">Models Dashboard</h1>
+      <div className="space-y-6">
+        {data?.vendors_list.map((vendor) => (
+          <VendorSection key={vendor.vendor} vendor={vendor} />
+        ))}
       </div>
     </div>
   );
