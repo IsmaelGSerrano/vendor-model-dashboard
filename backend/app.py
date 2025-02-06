@@ -7,11 +7,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-# Configure CORS to only allow requests from our frontend
 CORS(app, resources={
-    r"/api/*": {
+    r"/*": {
         "origins": ["http://localhost", "http://localhost:80", "http://127.0.0.1", "http://127.0.0.1:80"],
-        "methods": ["GET"],  # Only allow GET requests
+        "methods": ["GET"],
         "allow_headers": ["Content-Type"]
     }
 })
@@ -57,7 +56,7 @@ MOCK_DATA = {
     ]
 }
 
-@app.route('/api/models', methods=['GET'])
+@app.route('/models', methods=['GET'])
 def get_models():
     try:
         account_name = os.getenv('AZURE_STORAGE_ACCOUNT')
@@ -88,4 +87,4 @@ def get_models():
         return jsonify(MOCK_DATA)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='127.0.0.1', port=5000)
