@@ -7,7 +7,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+# Configure CORS to only allow requests from our frontend
+CORS(app, resources={
+    r"/api/*": {
+        "origins": ["http://localhost", "http://localhost:80", "http://127.0.0.1", "http://127.0.0.1:80"],
+        "methods": ["GET"],  # Only allow GET requests
+        "allow_headers": ["Content-Type"]
+    }
+})
 
 # Mock data as fallback
 MOCK_DATA = {
