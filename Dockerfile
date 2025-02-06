@@ -1,6 +1,5 @@
 # Build stage for frontend
-FROM node:20-alpine as frontend-build
-
+FROM node:20-alpine AS frontend-build
 WORKDIR /app/frontend
 
 # Copy package files
@@ -16,8 +15,7 @@ COPY . .
 RUN npm run build
 
 # Build stage for backend
-FROM python:3.9-slim as backend-build
-
+FROM python:3.9-slim AS backend-build
 WORKDIR /app/backend
 
 # Copy backend requirements
