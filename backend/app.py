@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
-from azure.storage.blob import BlobServiceClient
+from azure.storage.blob import BlobServiceClient, ContainerClient
 import os
 from dotenv import load_dotenv
 
@@ -59,16 +59,17 @@ MOCK_DATA = {
 @app.route('/models', methods=['GET'])
 def get_models():
     try:
-        account_name = os.getenv('AZURE_STORAGE_ACCOUNT')
-        container_name = os.getenv('AZURE_CONTAINER_NAME')
-        connection_string = os.getenv('AZURE_CONNECTION_STRING')
+        account_name = os.getenv('STORAGE_ACCOUNT_NAME')
+        container_name = os.getenv('CONTAINER_NAME')
+        sas_token = os.getenv('SAS_TOKEN')
 
-        if not all([account_name, container_name, connection_string]):
+        if not all([account_name, container_name, sas_token]):
             print("Missing Azure configuration, falling back to mock data")
             return jsonify(MOCK_DATA)
 
-        # Initialize the connection to Azure
-        blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+        # Initialize the blob service client using account URL with SAS token
+        account_url = f"https://{account_name}.blob.core.windows.net"
+        blob_service_client = BlobServiceClient(account_url=account_url, credential=sas_token)
         container_client = blob_service_client.get_container_client(container_name)
         
         # Get the first blob in the container (assuming it's our JSON file)
