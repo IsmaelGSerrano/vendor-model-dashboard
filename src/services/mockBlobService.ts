@@ -2,7 +2,7 @@ import { ModelsData } from "@/types/models";
 
 const fetchBlobData = async (): Promise<ModelsData> => {
   try {
-    const response = await fetch('http://localhost:5000/api/models');
+    const response = await fetch('/api/models');
     if (!response.ok) {
       throw new Error('Failed to fetch from backend');
     }
