@@ -72,9 +72,9 @@ We don't support custom domains (yet). If you want to deploy your project under 
 
 .env file:
 ```
-VITE_BLOB_SAS_TOKEN=
-VITE_STORAGE_ACCOUNT=
-VITE_CONTAINER_NAME=
+SAS_TOKEN=
+STORAGE_ACCOUNT_NAME=
+CONTAINER_NAME=
 ```
 
 
