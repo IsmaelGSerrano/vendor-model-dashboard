@@ -9,7 +9,7 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app, resources={
     r"/*": {
-        "origins": ["http://localhost", "http://localhost:80", "http://127.0.0.1", "http://127.0.0.1:80"],
+        "origins": ["http://localhost", "http://localhost:80", "http://localhost:8080", "http://127.0.0.1", "http://127.0.0.1:80", "http://127.0.0.1:8080"],
         "methods": ["GET"],
         "allow_headers": ["Content-Type"]
     }
