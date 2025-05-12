@@ -56,6 +56,7 @@ MOCK_DATA = {
     ]
 }
 
+
 @app.route('/models', methods=['GET'])
 def get_models():
     try:
@@ -69,23 +70,32 @@ def get_models():
 
         # Initialize the blob service client using account URL with SAS token
         account_url = f"https://{account_name}.blob.core.windows.net"
-        blob_service_client = BlobServiceClient(account_url=account_url, credential=sas_token)
-        container_client = blob_service_client.get_container_client(container_name)
-        
+        blob_service_client = BlobServiceClient(account_url=account_url,
+                                                credential=sas_token)
+        container_client = blob_service_client\
+            .get_container_client(container_name)
+
         # Get the first blob in the container (assuming it's our JSON file)
+
         blobs = list(container_client.list_blobs())
         if not blobs:
             print("No blobs found in container, falling back to mock data")
             return jsonify(MOCK_DATA)
-            
-        blob_client = container_client.get_blob_client(blobs[0])
-        data = blob_client.download_blob().readall()
-        
-        return data
+
+        companies = set()
+        metadata_blobs = []
+        for blob in blobs:
+            path_parts = blob.name.split('/')
+            if len(path_parts) > 0 and path_parts[-1] == "md_ml.json":
+                companies.add(path_parts[0])
+                metadata_blobs.append(blob)
+
+        return jsonify(list(companies))
 
     except Exception as e:
         print(f"Error fetching from blob storage: {str(e)}")
         return jsonify(MOCK_DATA)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
